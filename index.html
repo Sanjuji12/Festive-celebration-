@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>दिवाली की शुभकामनाएँ! ✨</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; /* Consider a more traditional font if you find a suitable one */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            flex-direction: column;
+            overflow-x: hidden; /* Prevent horizontal scroll from firecrackers */
+            /* Tiranga background */
+            background: linear-gradient(to bottom, #FF9933, #FFFFFF, #138808); /* Saffron, White, Green */
+            position: relative; /* Needed for positioning firecrackers */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); /* Almost opaque white */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            max-width: 550px; /* Slightly wider */
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 3px solid #ff9800; /* Deep Orange/Gold border - kept for festive look */
+            position: relative; /* For potential future internal effects */
+            z-index: 1; /* Ensure container is above background/firecrackers */
+        }
+
+        #laxmiImage {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px; /* Reduced margin to fit text below */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 10px;
+             /* Optional: Add a subtle glow */
+            filter: drop_shadow(0 0 8px rgba(255, 165, 0, 0.6));
+        }
+
+        /* Style for the Hindi text below the image */
+        .hindi-text-below-image {
+            font-size: 1.3em; /* Slightly larger font */
+            color: #e65100; /* Matching greeting color */
+            margin-top: 0;
+            margin-bottom: 15px; /* Space below this text */
+            font-weight: bold;
+            /* Animation */
+            animation: subtle-sway 3s ease-in-out infinite; /* Apply animation */
+            display: inline-block; /* Needed for transform to work well */
+        }
+
+        .hindi-text-below-image p {
+             margin: 5px 0; /* Space between the two lines */
+        }
+
+        /* Animation for the Hindi text */
+        @keyframes subtle-sway {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-0.5deg); } /* Sway slightly left */
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(0.5deg); } /* Sway slightly right */
+            100% { transform: rotate(0deg); }
+        }
+
+
+        #greeting {
+            font-size: 2.5em; /* Even larger font */
+            color: #e65100; /* Even deeper festive color */
+            margin-top: 0;
+            margin-bottom: 30px; /* More space below greeting */
+            min-height: 1.5em;
+            opacity: 0; /* Initially hidden for animation */
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Add text shadow */
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        .input-area p {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold; /* Make input label bold */
+        }
+
+        #nameInput {
+            padding: 12px;
+            margin-right: 10px;
+            border: 1px solid #ff9800; /* Gold border for input */
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            width: calc(70% - 15px);
+            max-width: 250px;
+            outline: none; /* Remove default outline */
+             transition: border-color 0.3s ease;
+        }
+         #nameInput:focus {
+             border-color: #e65100; /* Highlight border on focus */
+         }
+
+
+        #generateLinkBtn {
+            padding: 12px 18px;
+            background-color: #25d366; /* WhatsApp green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #generateLinkBtn:hover {
+            background-color: #128c7e;
+        }
+         #generateLinkBtn:active {
+             transform: scale(0.98); /* Add press effect */
+         }
+
+
+        #generateLinkBtn::before {
+             content: '\1F4AC'; /* Speech bubble emoji */
+             font-size: 1.2em;
+        }
+
+        #shareLinkArea {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff9c4; /* Lighter yellow */
+            border-radius: 5px;
+            word-break: break-all;
+            text-align: left;
+            display: none; /* Hidden initially */
+            font-style: italic;
+            color: #555;
+            border: 1px dashed #ffcc80; /* Dashed orange border */
+        }
+
+
+        /* --- Firecracker Animation CSS --- */
+        .firecracker {
+            position: absolute;
+            bottom: 0; /* Start at the bottom */
+            width: 8px; /* Size of the "rocket" */
+            height: 20px;
+            background-color: #ff4500; /* Red/Orange color */
+            border-radius: 2px;
+            pointer-events: none; /* Cannot be clicked */
+            z-index: 0; /* Below the container */
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Rocket movement animation */
+        @keyframes launch {
+            0% {
+                bottom: 0;
+                transform: translateX(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+            80% {
+                 bottom: 80%; /* Goes up */
+                 opacity: 0.8;
+            }
+            100% {
+                bottom: 100%; /* Off screen */
+                opacity: 0;
+                transform: translateX(calc(var(--spread) * 1px)); /* Varies launch angle */
+            }
+        }
+
+        /* Sparkle effect on explosion */
+         .firecracker::after {
+             content: '';
+             position: absolute;
+             width: 0;
+             height: 0;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             border-radius: 50%;
+             background: radial-gradient(circle at center, #ffeb3b 0%, transparent 80%); /* Yellow glow */
+             opacity: 0;
+         }
+
+         @keyframes explode {
+             0% {
+                 width: 0;
+                 height: 0;
+                 opacity: 0;
+             }
+             50% {
+                 width: 50px; /* Size of explosion */
+                 height: 50px;
+                 opacity: 1;
+             }
+             100% {
+                 width: 100px;
+                 height: 100px;
+                 opacity: 0;
+             }
+         }
+
+        /* Class added by JS for explosion */
+         .firecracker-explode::after {
+             animation: explode 0.8s ease-out forwards;
+         }
+
+         .firecracker-launch {
+            animation: launch var(--duration) ease-in forwards;
+         }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            #nameInput {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            #generateLinkBtn {
+                width: 100%;
+                justify-content: center;
+            }
+
+             .input-area {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #greeting {
+                font-size: 2em; /* Slightly smaller on small screens */
+            }
+             .hindi-text-below-image {
+                 font-size: 1.1em; /* Adjusted size for animation on small screens */
+             }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="laxmiImage" src="laxmi.gif" alt="Laxmi Animation">
+
+        <div class="hindi-text-below-image">
+            <p>दीपों का त्यौहार</p>
+            <p>आपको और आपके परिवार को दिवाली की शुभकामनाएँ!</p>
+        </div>
+
+        <h1 id="greeting"></h1>
+
+        <div class="input-area">
+            <p>आपका शुभ नामः</p>
+            <input type="text" id="nameInput" placeholder="जैसे: रवि">
+            <button id="generateLinkBtn">WhatsApp पर शेयर करें</button>
+        </div>
+
+        <div id="shareLinkArea">
+            लिंक WhatsApp पर सीधे शेयर होगा।
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const greetingElement = document.getElementById('greeting');
+            const nameInput = document.getElementById('nameInput');
+            const generateLinkBtn = document.getElementById('generateLinkBtn');
+            const shareLinkArea = document.getElementById('shareLinkArea');
+            const hindiTextBelowImage = document.querySelector('.hindi-text-below-image'); // Get the Hindi text element
+
+            // Function to launch a firecracker
+            function launchFirecracker() {
+                const cracker = document.createElement('div');
+                cracker.classList.add('firecracker');
+
+                // Random horizontal position (avoiding edges)
+                const startX = Math.random() * (window.innerWidth * 0.8) + (window.innerWidth * 0.1);
+                cracker.style.left = `${startX}px`;
+
+                // Random duration and spread for variation
+                const duration = 1.5 + Math.random(); // 1.5s to 2.5s
+                const spread = (Math.random() - 0.5) * 200; // -100 to 100 horizontal spread
+
+                cracker.style.setProperty('--duration', `${duration}s`);
+                cracker.style.setProperty('--spread', spread);
+
+
+                document.body.appendChild(cracker);
+
+                // Add launch animation class
+                cracker.classList.add('firecracker-launch');
+
+
+                // Trigger explosion animation shortly before rocket reaches top
+                const explodeDelay = duration * 0.8; // Explode 80% of the way up
+                setTimeout(() => {
+                     cracker.classList.add('firecracker-explode');
+                }, explodeDelay * 1000);
+
+
+                // Remove the element after animation finishes
+                setTimeout(() => {
+                    cracker.remove();
+                }, (duration + 1) * 1000); // Remove after launch and explosion
+            }
+
+            // Function to display the greeting, apply animation, and trigger firecrackers
+            function showGreeting(name) {
+                 // Updated greeting text
+                 greetingElement.textContent = `Happy Diwali from ${name}! ✨`;
+                 greetingElement.classList.add('animated-greeting');
+
+                 // Hide input area and Hindi text below image once greeting is shown from URL
+                 document.querySelector('.input-area').style.display = 'none';
+                 shareLinkArea.style.display = 'none'; // Hide info area too
+                 hindiTextBelowImage.style.display = 'none'; // Hide Hindi text below image
+
+                 // --- Launch Firecrackers ---
+                 // Launch a few firecrackers with slight delays
+                 const numCrackers = 8; // Number of firecrackers
+                 for (let i = 0; i < numCrackers; i++) {
+                     setTimeout(launchFirecracker, i * 200); // Launch one every 200ms
+                 }
+            }
+
+            // --- Check URL for name on page load ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const nameFromUrl = urlParams.get('name');
+
+            if (nameFromUrl) {
+                // If name is in the URL, decode it and show the greeting + firecrackers
+                const decodedName = decodeURIComponent(nameFromUrl);
+                showGreeting(decodedName);
+            } else {
+                 // If no name in URL, show a default message and keep input visible
+                 greetingElement.textContent = 'दिवाली की शुभकामनाएँ!'; // Default message
+                 document.querySelector('.input-area').style.display = 'flex'; // Ensure input area is visible
+                 shareLinkArea.style.display = 'block'; // Show info message
+                 hindiTextBelowImage.style.display = 'block'; // Ensure Hindi text below image is visible
+            }
+
+            // --- Handle button click to generate WhatsApp link ---
+            generateLinkBtn.addEventListener('click', () => {
+                const enteredName = nameInput.value.trim(); // Get entered name, remove whitespace
+
+                if (enteredName) {
+                    // Encode the name for the URL
+                    const encodedName = encodeURIComponent(enteredName);
+
+                    // Construct the shareable URL (this is the link that will be shared)
+                    // Uses current origin and path + name parameter. Correct for GitHub Pages.
+                    const shareableUrl = `${window.location.origin}${window.location.pathname}?name=${encodedName}`;
+
+                    // Create the WhatsApp share URL
+                    // The text includes a message and the generated link
+                    const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(`आपको ${enteredName} की ओर से दिवाली की शुभकामनाएँ!\n\nयह देखें: ${shareableUrl}`)}`;
+
+                    // <!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>दिवाली की शुभकामनाएँ! ✨</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif; /* Consider a more traditional font if you find a suitable one */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            flex-direction: column;
+            overflow-x: hidden; /* Prevent horizontal scroll from firecrackers */
+            /* Tiranga background */
+            background: linear-gradient(to bottom, #FF9933, #FFFFFF, #138808); /* Saffron, White, Green */
+            position: relative; /* Needed for positioning firecrackers */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.95); /* Almost opaque white */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Stronger shadow */
+            max-width: 550px; /* Slightly wider */
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 3px solid #ff9800; /* Deep Orange/Gold border - kept for festive look */
+            position: relative; /* For potential future internal effects */
+            z-index: 1; /* Ensure container is above background/firecrackers */
+        }
+
+        #laxmiImage {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px; /* Reduced margin to fit text below */
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 10px;
+             /* Optional: Add a subtle glow */
+            filter: drop_shadow(0 0 8px rgba(255, 165, 0, 0.6));
+        }
+
+        /* Style for the Hindi text below the image */
+        .hindi-text-below-image {
+            font-size: 1.3em; /* Slightly larger font */
+            color: #e65100; /* Matching greeting color */
+            margin-top: 0;
+            margin-bottom: 15px; /* Space below this text */
+            font-weight: bold;
+            /* Animation */
+            animation: subtle-sway 3s ease-in-out infinite; /* Apply animation */
+            display: inline-block; /* Needed for transform to work well */
+        }
+
+        .hindi-text-below-image p {
+             margin: 5px 0; /* Space between the two lines */
+        }
+
+        /* Animation for the Hindi text */
+        @keyframes subtle-sway {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-0.5deg); } /* Sway slightly left */
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(0.5deg); } /* Sway slightly right */
+            100% { transform: rotate(0deg); }
+        }
+
+
+        #greeting {
+            font-size: 2.5em; /* Even larger font */
+            color: #e65100; /* Even deeper festive color */
+            margin-top: 0;
+            margin-bottom: 30px; /* More space below greeting */
+            min-height: 1.5em;
+            opacity: 0; /* Initially hidden for animation */
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Add text shadow */
+        }
+
+        .input-area {
+            margin-bottom: 20px;
+        }
+
+        .input-area p {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold; /* Make input label bold */
+        }
+
+        #nameInput {
+            padding: 12px;
+            margin-right: 10px;
+            border: 1px solid #ff9800; /* Gold border for input */
+            border-radius: 5px;
+            font-size: 1em;
+            box-sizing: border-box;
+            width: calc(70% - 15px);
+            max-width: 250px;
+            outline: none; /* Remove default outline */
+             transition: border-color 0.3s ease;
+        }
+         #nameInput:focus {
+             border-color: #e65100; /* Highlight border on focus */
+         }
+
+
+        #generateLinkBtn {
+            padding: 12px 18px;
+            background-color: #25d366; /* WhatsApp green */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #generateLinkBtn:hover {
+            background-color: #128c7e;
+        }
+         #generateLinkBtn:active {
+             transform: scale(0.98); /* Add press effect */
+         }
+
+
+        #generateLinkBtn::before {
+             content: '\1F4AC'; /* Speech bubble emoji */
+             font-size: 1.2em;
+        }
+
+        #shareLinkArea {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff9c4; /* Lighter yellow */
+            border-radius: 5px;
+            word-break: break-all;
+            text-align: left;
+            display: none; /* Hidden initially */
+            font-style: italic;
+            color: #555;
+            border: 1px dashed #ffcc80; /* Dashed orange border */
+        }
+
+
+        /* --- Firecracker Animation CSS --- */
+        .firecracker {
+            position: absolute;
+            bottom: 0; /* Start at the bottom */
+            width: 8px; /* Size of the "rocket" */
+            height: 20px;
+            background-color: #ff4500; /* Red/Orange color */
+            border-radius: 2px;
+            pointer-events: none; /* Cannot be clicked */
+            z-index: 0; /* Below the container */
+            opacity: 0; /* Start hidden */
+        }
+
+        /* Rocket movement animation */
+        @keyframes launch {
+            0% {
+                bottom: 0;
+                transform: translateX(0);
+                opacity: 1;
+            }
+            50% {
+                opacity: 1;
+            }
+       
